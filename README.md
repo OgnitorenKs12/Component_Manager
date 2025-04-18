@@ -10,7 +10,7 @@ All rights of the work belong to Hüseyin UZUNYAYLA. It is forbidden to develop,
 <details><B><summary> • English guide</B></summary>
 -Translated from Turkish to English with "www.deepl.com/translator"
 
-![Repo1](https://raw.githubusercontent.com/OgnitorenKs/Component_Manager/main/.github/EN.png)
+![Repo1](https://raw.githubusercontent.com/OgnitorenKs12/Component_Manager/main/.github/EN.png)
 
 <details><B><summary> 1 - Activate Defender</B></summary>
 For this section to work, Defender and its components must not be damaged. If you have stepped outside the standard shutdown commands, this section may not be sufficient to restart Defender.
@@ -35,7 +35,7 @@ If you have applied the “System optimization [Playbook]” setting with Ognito
 
 <details><B><summary> • Türkçe kılavuz</B></summary>
 
-![Repo2](https://raw.githubusercontent.com/OgnitorenKs/Component_Manager/main/.github/TR.png)
+![Repo2](https://raw.githubusercontent.com/OgnitorenKs12/Component_Manager/main/.github/TR.png)
 
 <details><B><summary> 1 - Defender aktifleştir</B></summary>
 Bu bölümün çalışması için Defender ve bileşenlerinin zarar görmemesi gerekiyor. Standart kapatma komutlarının dışını çıktıysanız bu bölüm Defender'ı yeniden çalıştırmak için yeterli olamayabilir.
