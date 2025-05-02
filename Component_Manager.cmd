@@ -19,7 +19,7 @@
 echo off
 chcp 65001 > NUL 2>&1
 setlocal enabledelayedexpansion
-set Version=1.1
+set Version=1.2
 title Component Manager_v!Version! │ OgnitorenKs
 cls
 
@@ -37,7 +37,7 @@ set NSudo="%Konum%\Bin\NSudo.exe" -U:T -P:E -Wait -ShowWindowMode:hide cmd /c
 REM -------------------------------------------------------------
 REM Yönetici yetkisini kontrol eder. Yoksa yetki vererek açar
 reg query "HKU\S-1-5-19" > NUL 2>&1
-	if !errorlevel! NEQ 0 (Call :Powershell "Start-Process '%Konum%\Component_Manager.cmd' -Verb Runas"&exit)
+    if !errorlevel! NEQ 0 (Call :Powershell "Start-Process '%Konum%\Component_Manager.cmd' -Verb Runas"&exit)
 
 REM -------------------------------------------------------------
 REM Sistem bilgisini alır
@@ -47,8 +47,8 @@ DEL /F /Q /A "%Konum%\Bin\OS.txt" > NUL 2>&1
 
 REM -------------------------------------------------------------
 FOR /F "tokens=6" %%a in ('Dism /online /Get-intl ^| Find /I "Default system UI language"') do (
-	if "%%a" EQU "tr-TR" (set Dil=%Konum%\Bin\Language\Turkish.cmd)
-	if "%%a" NEQ "tr-TR" (set Dil=%Konum%\Bin\Language\English.cmd)
+    if "%%a" EQU "tr-TR" (set Dil=%Konum%\Bin\Language\Turkish.cmd)
+    if "%%a" NEQ "tr-TR" (set Dil=%Konum%\Bin\Language\English.cmd)
 )
 
 REM -------------------------------------------------------------
@@ -61,14 +61,14 @@ Call :Dil A 2 T0002
 set /p Value=►%R%[32m !LA2!= %R%[0m
 Call :Upper %Value% Value
 Call :Dil A 2 T0003&echo %R%[36m !LA2! %R%[0m
-	if "!Value!" EQU "1" (Call :Defender_ON)
-	if "!Value!" EQU "2" (Call :Defender_OFF)
-	if "!Value!" EQU "3" (Call :StartMenu_ON)
-	if "!Value!" EQU "4" (Call :StartMenu_OFF)
-	if "!Value!" EQU "5" (Call :Search_ON)
-	if "!Value!" EQU "6" (Call :Search_OFF)
-	if "!Value!" EQU "7" (Call :Widgets_ON)
-	if "!Value!" EQU "8" (Call :Edge_ON)
+    if "!Value!" EQU "1" (Call :Defender_ON)
+    if "!Value!" EQU "2" (Call :Defender_OFF)
+    if "!Value!" EQU "3" (Call :StartMenu_ON)
+    if "!Value!" EQU "4" (Call :StartMenu_OFF)
+    if "!Value!" EQU "5" (Call :Search_ON)
+    if "!Value!" EQU "6" (Call :Search_OFF)
+    if "!Value!" EQU "7" (Call :Widgets_ON)
+    if "!Value!" EQU "8" (Call :Edge_ON)
 Call :Dil A 2 T0001
 echo %R%[92m !LA2! %R%[0m
 timeout /t 2 /nobreak > NUL
@@ -118,19 +118,8 @@ goto :eof
 
 REM -------------------------------------------------------------
 :Defender_ON
-Call :Service_Admin SecurityHealthService 3
-Call :Service_Admin Sense 3
-Call :Service_Admin SgrmBroker 3
-Call :Service_Admin WdNisSvc 3
-Call :Service_Admin WinDefend 2
-Call :Service_Admin wscsvc 2
-Call :Service_Admin WdNisDrv 2
-Call :Service_Admin WdFilter 0
-Call :Service_Admin WdBoot 0
-Call :Service_Admin SgrmAgent 3
-Call :Service_Admin MsSecFlt 0
-Call :Service_Admin webthreatdefsvc 3
-Call :Service_Admin webthreatdefusersvc 2
+Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth"
+Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" "SecurityHealth" REG_SZ "C:\Windows\System32\SecurityHealthSystray.exe"
 Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows Defender Security Center\Notifications" /v "DisableNotifications" 
 Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows Defender Security Center\Notifications" /v "DisableEnhancedNotifications"
 Call :RegDel "HKCU\SOFTWARE\Microsoft\Windows Security Health\State" /v "AccountProtection_MicrosoftAccount_Disconnected"
@@ -140,7 +129,6 @@ Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows Defender\Features" "TamperProtecti
 Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows Defender\Features" "TamperProtectionSource" REG_DWORD 5
 Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows Defender\Signature Updates" /v "FirstAuGracePeriod"
 Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows Defender\UX Configuration" /v "DisablePrivacyMode"
-Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" "SecurityHealth" REG_BINARY "040000000000000000000000"
 Call :RegDel "HKLM\SOFTWARE\Policies\Microsoft\MRT"
 Call :RegDel "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray"
 Call :RegDel "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender"
@@ -171,13 +159,37 @@ Call :RegKey "HKCR\Directory\shellex\ContextMenuHandlers\EPP"
 Call :RegKey "HKCR\*\shellex\ContextMenuHandlers\EPP"
 Call :RegVeAdd "HKCR\CLSID\{09A47860-11B0-4DA5-AFA5-26D86198A780}\Version" REG_SZ "C:\Program Files\Windows Defender\shellext.dll"
 Call :RegAdd "HKCR\CLSID\{09A47860-11B0-4DA5-AFA5-26D86198A780}\Version" "ThreadingModel" REG_SZ "Apartment"
+Call :RegVeAdd "HKCU\Software\Microsoft\Edge\SmartScreenEnabled" REG_DWORD 1
 Call :Schtasks "Enable" "\Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance"
 Call :Schtasks "Enable" "\Microsoft\Windows\Windows Defender\Windows Defender Cleanup"
 Call :Schtasks "Enable" "\Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan"
 Call :Schtasks "Enable" "\Microsoft\Windows\Windows Defender\Windows Defender Verification"
 Call :Check_Rename "%Windir%\System32\smartscreen.exe"
+Call :Check_Rename "%Windir%\System32\smartscreen.dll"
+Call :Check_Rename "%Windir%\System32\smartscreenps.dll"
+Call :Check_Rename "%Windir%\SysWOW64\smartscreen.dll"
+Call :Check_Rename "%Windir%\SysWOW64\smartscreenps.dll"
 %NSudo% rename "%Windir%\System32\smartscreen_OLD.exe" "smartscreen.exe"
+%NSudo% rename "%Windir%\System32\smartscreen_OLD.dll" "smartscreen.dll"
+%NSudo% rename "%Windir%\System32\smartscreenps_OLD.dll" "smartscreenps.dll"
+%NSudo% rename "%Windir%\SysWOW64\smartscreen_OLD.dll" "smartscreen.dll"
+%NSudo% rename "%Windir%\SysWOW64\smartscreenps_OLD.dll" "smartscreenps.dll"
 Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\smartscreen.exe"
+Call :Service_Admin SecurityHealthService 3
+Call :Service_Admin Sense 3
+Call :Service_Admin SgrmBroker 3
+Call :Service_Admin WdNisSvc 3
+Call :Service_Admin WinDefend 2
+Call :Service_Admin wscsvc 2
+Call :Service_Admin WdNisDrv 2
+Call :Service_Admin WdFilter 0
+Call :Service_Admin WdBoot 0
+Call :Service_Admin SgrmAgent 3
+Call :Service_Admin MsSecFlt 0
+Call :Service_Admin webthreatdefsvc 3
+Call :Service_Admin webthreatdefusersvc 2
+regsvr32 /u "C:\Program Files\Windows Defender\shellext.dll" /s > NUL 2>&1
+regsvr32 /i "C:\Program Files\Windows Defender\shellext.dll" /s > NUL 2>&1
 goto :eof
 
 REM -------------------------------------------------------------
@@ -204,7 +216,8 @@ Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows Defender\Features" "TamperProtecti
 Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows Defender\Features" "TamperProtectionSource" REG_DWORD "2"
 Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows Defender\Signature Updates" "FirstAuGracePeriod" REG_DWORD "0"
 Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows Defender\UX Configuration" "DisablePrivacyMode" REG_DWORD "1"
-Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" "SecurityHealth" REG_BINARY "030000000000000000000000"
+Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "SecurityHealth"
+Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth"
 Call :RegAdd "HKLM\SOFTWARE\Policies\Microsoft\MRT" "DontOfferThroughWUAU" REG_DWORD "1"
 Call :RegAdd "HKLM\SOFTWARE\Policies\Microsoft\MRT" "DontReportInfectionInformation" REG_DWORD "1"
 Call :RegAdd "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray" "HideSystray" REG_DWORD "1"
@@ -275,12 +288,22 @@ Call :RegAdd "HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Cu
 Call :RegDel "HKCR\Drive\shellex\ContextMenuHandlers\EPP"
 Call :RegDel "HKCR\Directory\shellex\ContextMenuHandlers\EPP"
 Call :RegDel "HKCR\*\shellex\ContextMenuHandlers\EPP"
+Call :RegVeAdd "HKCU\Software\Microsoft\Edge\SmartScreenEnabled" REG_DWORD 0
 Call :Schtasks "Disable" "\Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance"
 Call :Schtasks "Disable" "\Microsoft\Windows\Windows Defender\Windows Defender Cleanup"
 Call :Schtasks "Disable" "\Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan"
 Call :Schtasks "Disable" "\Microsoft\Windows\Windows Defender\Windows Defender Verification"
-Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\CompatTelRunner.exe" "Debugger" REG_SZ "%%%%windir%%%%\System32\taskkill.exe"
 Call :RegAdd "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\smartscreen.exe" "Debugger" REG_SZ "%%%%windir%%%%\System32\taskkill.exe"
+Call :Check_Rename "%Windir%\System32\smartscreen.exe"
+Call :Check_Rename "%Windir%\System32\smartscreen.dll"
+Call :Check_Rename "%Windir%\System32\smartscreenps.dll"
+Call :Check_Rename "%Windir%\SysWOW64\smartscreen.dll"
+Call :Check_Rename "%Windir%\SysWOW64\smartscreenps.dll"
+%NSudo% rename "%Windir%\System32\smartscreen.exe" "smartscreen_OLD.exe"
+%NSudo% rename "%Windir%\System32\smartscreen.dll" "smartscreen_OLD.dll"
+%NSudo% rename "%Windir%\System32\smartscreenps.dll" "smartscreenps_OLD.dll"
+%NSudo% rename "%Windir%\SysWOW64\smartscreen.dll" "smartscreen_OLD.dll"
+%NSudo% rename "%Windir%\SysWOW64\smartscreenps.dll" "smartscreenps_OLD.dll"
 goto :eof
 
 REM -------------------------------------------------------------
@@ -337,74 +360,74 @@ goto :eof
 REM -------------------------------------------------------------
 :Check_Rename
 dir /b "%~1" > NUL 2>&1
-	if "!errorlevel!" EQU "0" (%NSudo% DEL /F /Q /A "%~dp1%~n1_OLD%~x1")
+    if "!errorlevel!" EQU "0" (%NSudo% DEL /F /Q /A "%~dp1%~n1_OLD%~x1")
 goto :eof
 
 :Schtasks
 schtasks /change /TN "%~2" /%~1 > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% schtasks /change /TN "%~2" /%~1)
+    if !errorlevel! NEQ 0 (%NSudo% schtasks /change /TN "%~2" /%~1)
 goto :eof
 :RegKey
 Reg add "%~1" /f > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg add "%~1" /f)
+    if !errorlevel! NEQ 0 (%NSudo% Reg add "%~1" /f)
 goto :eof
 :RegAdd
 Reg add "%~1" /f /v "%~2" /t %~3 /d "%~4" > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg add "%~1" /f /v "%~2" /t %~3 /d "%~4")
+    if !errorlevel! NEQ 0 (%NSudo% Reg add "%~1" /f /v "%~2" /t %~3 /d "%~4")
 goto :eof
 :RegVeAdd
 Reg add "%~1" /ve /t %~2 /d "%~3" /f > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg add "%~1" /f /ve /t %~2 /d "%~3")
+    if !errorlevel! NEQ 0 (%NSudo% Reg add "%~1" /f /ve /t %~2 /d "%~3")
 goto :eof
 :RegDel
 if !Show! EQU 1 (echo %R%[90mReg delete%R%[33m %* %R%[90m /f%R%[0m)
 Reg delete %* /f > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg delete %* /f)
+    if !errorlevel! NEQ 0 (%NSudo% Reg delete %* /f)
 goto :eof
 :RegAdd_CCS
 Reg add "HKLM\SYSTEM\CurrentControlSet\%~1" /f /v "%~2" /t %~3 /d "%~4" > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg add "HKLM\SYSTEM\CurrentControlSet\%~1" /f /v "%~2" /t %~3 /d "%~4")
+    if !errorlevel! NEQ 0 (%NSudo% Reg add "HKLM\SYSTEM\CurrentControlSet\%~1" /f /v "%~2" /t %~3 /d "%~4")
 Reg add "HKLM\SYSTEM\ControlSet001\%~1" /f /v "%~2" /t %~3 /d "%~4" > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg add "HKLM\SYSTEM\ControlSet001\%~1" /f /v "%~2" /t %~3 /d "%~4")
+    if !errorlevel! NEQ 0 (%NSudo% Reg add "HKLM\SYSTEM\ControlSet001\%~1" /f /v "%~2" /t %~3 /d "%~4")
 Reg add "HKLM\SYSTEM\ControlSet002\%~1" /f /v "%~2" /t %~3 /d "%~4" > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% Reg add "HKLM\SYSTEM\ControlSet002\%~1" /f /v "%~2" /t %~3 /d "%~4")
+    if !errorlevel! NEQ 0 (%NSudo% Reg add "HKLM\SYSTEM\ControlSet002\%~1" /f /v "%~2" /t %~3 /d "%~4")
 goto :eof
 
 REM -------------------------------------------------------------
 :Service_Admin
 reg query "HKLM\SYSTEM\CurrentControlSet\Services\%~1" /v "Start" > NUL 2>&1
-	if !errorlevel! EQU 0 (if %~2 EQU 0 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 0
-										 Call :SC_Config %~1 Boot&Call :NET start %~1
-										)
-						   if %~2 EQU 1 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 1
-										 Call :SC_Config %~1 System&Call :NET start %~1
-										)
-						   if %~2 EQU 2 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 2
-										 Call :SC_Config %~1 Auto&Call :NET start %~1
-										)
-						   if %~2 EQU 3 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 3
-										 Call :SC_Config %~1 Demand&Call :NET start %~1
-										)
-						   if %~2 EQU 4 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 4
-										 Call :SC_Config %~1 Disable&Call :NET stop %~1
-										)
-						   if %~2 EQU 6 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 4
-										 Call :NET stop %~1&Call :SC_Remove %~1
-										)
+    if !errorlevel! EQU 0 (if %~2 EQU 0 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 0
+                                         Call :SC_Config %~1 Boot&Call :NET start %~1
+                                        )
+                           if %~2 EQU 1 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 1
+                                         Call :SC_Config %~1 System&Call :NET start %~1
+                                        )
+                           if %~2 EQU 2 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 2
+                                         Call :SC_Config %~1 Auto&Call :NET start %~1
+                                        )
+                           if %~2 EQU 3 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 3
+                                         Call :SC_Config %~1 Demand&Call :NET start %~1
+                                        )
+                           if %~2 EQU 4 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 4
+                                         Call :SC_Config %~1 Disable&Call :NET stop %~1
+                                        )
+                           if %~2 EQU 6 (Call :RegAdd "HKLM\SYSTEM\CurrentControlSet\Services\%~1" "Start" REG_DWORD 4
+                                         Call :NET stop %~1&Call :SC_Remove %~1
+                                        )
 )
 goto :eof
 
 :SC_Config
 REM %~1: Hizmet %~2: Hizmet çalışma değeri
 sc config %~1 start= %~2 > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% sc config %~1 start= %~2)
+    if !errorlevel! NEQ 0 (%NSudo% sc config %~1 start= %~2)
 goto :eof
 
 REM -------------------------------------------------------------
 :NET
 REM %~1: start │ stop  %~2: Hizmet
 net %~1 %~2 /y > NUL 2>&1
-	if !errorlevel! NEQ 0 (%NSudo% net %~1 %~2 /y)
+    if !errorlevel! NEQ 0 (%NSudo% net %~1 %~2 /y)
 goto :eof
 
 REM -------------------------------------------------------------
