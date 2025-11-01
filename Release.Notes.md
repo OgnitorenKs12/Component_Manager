@@ -4,8 +4,12 @@
 -   Mail: ognitorenks@gmail.com
 -   Site: [https://ognitorenks.blospot.com](https://ognitorenks.blospot.com)
 
+<details><B><summary> Versiyon 1.4 ► 01.11.2025 </B></summary>
 
-<details><B><summary> Versiyon 1.3 ► GELİŞTİRİLİYOR... </B></summary>
+    • OneDrive yükleme işlemi eklendi. Toolbox ile kaldırma işlemi yapanlar yeniden yüklerken açılmama sorunuyla karşılaştığı için bu bölüm eklenmiştir.
+	• Sistem dilini otomatik seçme bölümündeki kod global kullanımda sorun çıkarmamamsı için revize edildi.
+
+</details><details><B><summary> Versiyon 1.3 ► 07.05.2025 </B></summary>
 
     • Defender aç/kapat ayarlarında;
         • "Kurcalama ayarının" regedit kayıtları güncellendi.

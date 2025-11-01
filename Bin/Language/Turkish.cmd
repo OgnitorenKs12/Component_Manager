@@ -19,9 +19,12 @@ echo   %R%[32m 5%R%[90m-%R%[33m Görev çubuğu arama özelliğini aktifleştir 
 echo   %R%[32m 6%R%[90m-%R%[33m Görev çubuğu arama özelliğini devre dışı bırak %R%[0m
 echo   %R%[32m 7%R%[90m-%R%[33m Görev çubuğu hava durumu/widgets aktifleştir%R%[90m Edge/EdgeWebView2/Taskbar Search yüklenir %R%[0m
 echo   %R%[32m 8%R%[90m-%R%[33m Edge/EdgeWebView2 yükleme engelini kaldır ve yükle %R%[0m
+echo   %R%[32m 9%R%[90m-%R%[33m OneDrive yükle %R%[0m
 goto :eof
-
 
 T0001>İşlem başarıyla tamamlandı>
 T0002>İşlem>
 T0003>Seçtiğiniz ayarlar uygulanıyor, lütfen bekleyin...>
+T0004>[HATA] İnternet bağlantınız yok>
+T0005>[HATA] Microsoft Store üzerinden 'Uygulama yükleyiciyi' güncelleyiniz.>
+T0006>Winget sistemi kontrol ediliyor>

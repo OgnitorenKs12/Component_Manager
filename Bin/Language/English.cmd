@@ -18,9 +18,12 @@ echo   %R%[32m 5%R%[90m-%R%[33m Activate the taskbar search feature %R%[0m
 echo   %R%[32m 6%R%[90m-%R%[33m Disable taskbar search feature %R%[0m
 echo   %R%[32m 7%R%[90m-%R%[33m Activate taskbar weather/widgets%R%[90m Edge/EdgeWebView2/Taskbar Search is installed %R%[0m
 echo   %R%[32m 8%R%[90m-%R%[33m Unblock and install Edge/EdgeWebView2 %R%[0m
+echo   %R%[32m 9%R%[90m-%R%[33m Install OneDrive %R%[0m
 goto :eof
-
 
 T0001>Process completed successfully>
 T0002>Process>
 T0003>Your selected settings are being applied, please wait...>
+T0004>[ERROR] No internet connection>
+T0005>[ERROR] Update the 'App installer' from the Microsoft Store.>
+T0006>Checking the Winget system>

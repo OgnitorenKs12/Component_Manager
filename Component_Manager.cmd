@@ -19,7 +19,7 @@
 echo off
 chcp 65001 > NUL 2>&1
 setlocal enabledelayedexpansion
-set Version=1.3
+set Version=1.4
 title Component Manager_v!Version! │ OgnitorenKs
 cls
 
@@ -46,12 +46,11 @@ FOR /F "tokens=5" %%a in ('Findstr /i "Caption" %Konum%\Bin\OS.txt') do (set Win
 DEL /F /Q /A "%Konum%\Bin\OS.txt" > NUL 2>&1
 
 REM -------------------------------------------------------------
+set Dil=%Konum%\Bin\Language\English.cmd
 FOR /F "tokens=6" %%a in ('Dism /online /Get-intl ^| Find /I "Default system UI language"') do (
     if "%%a" EQU "tr-TR" (set Dil=%Konum%\Bin\Language\Turkish.cmd)
-    if "%%a" NEQ "tr-TR" (set Dil=%Konum%\Bin\Language\English.cmd)
 )
-
-REM -------------------------------------------------------------
+REM ██████████████████████████████████████████████████████████████████
 :Menu
 cls
 echo.
@@ -69,13 +68,14 @@ Call :Dil A 2 T0003&echo %R%[36m !LA2! %R%[0m
     if "!Value!" EQU "6" (Call :Search_OFF)
     if "!Value!" EQU "7" (Call :Widgets_ON)
     if "!Value!" EQU "8" (Call :Edge_ON)
+    if "!Value!" EQU "9" (set MMValue=OneDrive_Install&goto Kontrol)
 Call :Dil A 2 T0001
 echo %R%[92m !LA2! %R%[0m
 timeout /t 2 /nobreak > NUL
 goto Menu
 exit
 
-REM -------------------------------------------------------------
+:: ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 :__HANGAR__
 :Search_ON
 Call :Check_Rename "%Windir%\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\SearchHost.exe"
@@ -189,8 +189,35 @@ Call :Service_Admin SgrmAgent 3
 Call :Service_Admin MsSecFlt 0
 Call :Service_Admin webthreatdefsvc 3
 Call :Service_Admin webthreatdefusersvc 2
-regsvr32 /u "C:\Program Files\Windows Defender\shellext.dll" /s > NUL 2>&1
-regsvr32 /i "C:\Program Files\Windows Defender\shellext.dll" /s > NUL 2>&1
+FOR %%g in (
+"C:\Program Files\Windows Defender\AMMonitoringProvider.dll"
+"C:\Program Files\Windows Defender\DefenderCSP.dll"
+"C:\Program Files\Windows Defender\endpointdlp.dll"
+"C:\Program Files\Windows Defender\EppManifest.dll"
+"C:\Program Files\Windows Defender\MpAsDesc.dll"
+"C:\Program Files\Windows Defender\MpAzSubmit.dll"
+"C:\Program Files\Windows Defender\MpClient.dll"
+"C:\Program Files\Windows Defender\MpCommu.dll"
+"C:\Program Files\Windows Defender\MpDetours.dll"
+"C:\Program Files\Windows Defender\MpDetoursCopyAccelerator.dll"
+"C:\Program Files\Windows Defender\MpEvMsg.dll"
+"C:\Program Files\Windows Defender\MpOAV.dll"
+"C:\Program Files\Windows Defender\MpProvider.dll"
+"C:\Program Files\Windows Defender\MpRtp.dll"
+"C:\Program Files\Windows Defender\MpSvc.dll"
+"C:\Program Files\Windows Defender\MsMpCom.dll"
+"C:\Program Files\Windows Defender\MsMpLics.dll"
+"C:\Program Files\Windows Defender\MsMpRes.dll"
+"C:\Program Files\Windows Defender\ProtectionManagement.dll"
+"C:\Program Files\Windows Defender\shellext.dll"
+"C:\Program Files (x86)\Windows Defender\EppManifest.dll"
+"C:\Program Files (x86)\Windows Defender\MpAsDesc.dll"
+"C:\Program Files (x86)\Windows Defender\MpClient.dll"
+"C:\Program Files (x86)\Windows Defender\MpDetours.dll"
+"C:\Program Files (x86)\Windows Defender\MpDetoursCopyAccelerator.dll"
+"C:\Program Files (x86)\Windows Defender\MpOAV.dll"
+"C:\Program Files (x86)\Windows Defender\MsMpLics.dll"
+) do (regsvr32 /i %%g /s > NUL 2>&1)
 goto :eof
 
 REM -------------------------------------------------------------
@@ -306,6 +333,35 @@ Call :Check_Rename "%Windir%\SysWOW64\smartscreenps.dll"
 %NSudo% rename "%Windir%\System32\smartscreenps.dll" "smartscreenps_OLD.dll"
 %NSudo% rename "%Windir%\SysWOW64\smartscreen.dll" "smartscreen_OLD.dll"
 %NSudo% rename "%Windir%\SysWOW64\smartscreenps.dll" "smartscreenps_OLD.dll"
+FOR %%g in (
+"C:\Program Files\Windows Defender\AMMonitoringProvider.dll"
+"C:\Program Files\Windows Defender\DefenderCSP.dll"
+"C:\Program Files\Windows Defender\endpointdlp.dll"
+"C:\Program Files\Windows Defender\EppManifest.dll"
+"C:\Program Files\Windows Defender\MpAsDesc.dll"
+"C:\Program Files\Windows Defender\MpAzSubmit.dll"
+"C:\Program Files\Windows Defender\MpClient.dll"
+"C:\Program Files\Windows Defender\MpCommu.dll"
+"C:\Program Files\Windows Defender\MpDetours.dll"
+"C:\Program Files\Windows Defender\MpDetoursCopyAccelerator.dll"
+"C:\Program Files\Windows Defender\MpEvMsg.dll"
+"C:\Program Files\Windows Defender\MpOAV.dll"
+"C:\Program Files\Windows Defender\MpProvider.dll"
+"C:\Program Files\Windows Defender\MpRtp.dll"
+"C:\Program Files\Windows Defender\MpSvc.dll"
+"C:\Program Files\Windows Defender\MsMpCom.dll"
+"C:\Program Files\Windows Defender\MsMpLics.dll"
+"C:\Program Files\Windows Defender\MsMpRes.dll"
+"C:\Program Files\Windows Defender\ProtectionManagement.dll"
+"C:\Program Files\Windows Defender\shellext.dll"
+"C:\Program Files (x86)\Windows Defender\EppManifest.dll"
+"C:\Program Files (x86)\Windows Defender\MpAsDesc.dll"
+"C:\Program Files (x86)\Windows Defender\MpClient.dll"
+"C:\Program Files (x86)\Windows Defender\MpDetours.dll"
+"C:\Program Files (x86)\Windows Defender\MpDetoursCopyAccelerator.dll"
+"C:\Program Files (x86)\Windows Defender\MpOAV.dll"
+"C:\Program Files (x86)\Windows Defender\MsMpLics.dll"
+) do (regsvr32 /u %%g /s > NUL 2>&1)
 goto :eof
 
 REM -------------------------------------------------------------
@@ -352,6 +408,17 @@ Call :RegDel "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execu
 goto :eof
 
 REM -------------------------------------------------------------
+:OneDrive_Install
+Call :RegDel "HKLM\SOFTWARE\Microsoft\OneDrive" /v "PreventNetworkTrafficPreUserSignIn"
+Call :RegKey "HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
+Call :RegKey "HKCR\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
+Call :RegDel "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-280811Enabled"
+Call :RegDel "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-280810Enabled"
+Call :RegDel "HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC"
+Call :Winget Microsoft.OneDrive
+goto :eof
+
+REM ██████████████████████████████████████████████████████████████████
 :Dil
 REM Dil verilerini buradan alıyorum. Call komutu ile buraya uygun değerleri gönderiyorum.
 REM %~1= Harf │ %~2= tokens değeri │ %~3= Find değeri
@@ -446,4 +513,48 @@ REM Bu bölüme yönlendirdiğim kelimeleri büyük harf yaptırıyorum.
 chcp 437 > NUL 2>&1
 FOR /F %%g in ('Powershell -command "'%~1'.ToUpper()"') do (set %~2=%%g)
 chcp 65001 > NUL 2>&1
+goto :eof
+
+REM -------------------------------------------------------------
+:Winget
+winget settings --enable InstallerHashOverride > NUL 2>&1
+winget list "%~1" --accept-source-agreements > NUL 2>&1
+    if "!errorlevel!" NEQ "0" (winget install -e --silent --force --accept-source-agreements --accept-package-agreements --id %~1 --ignore-security-hash
+                                    if "!errorlevel!" NEQ "0" (cls
+                                                               "%Konum%\Bin\NSudo.exe" -U:C -Wait cmd /c winget install -e --silent --force --accept-source-agreements --accept-package-agreements --id %~1 --ignore-security-hash
+                                                              )
+)
+winget settings --disable InstallerHashOverride > NUL 2>&1
+goto :eof
+
+REM -------------------------------------------------------------
+:Kontrol
+Call :Dil A 2 T0006&echo %R%[36m !LA2!... %R%[0m
+Call :Internet_Kontrol
+    if "!Internet!" EQU "1" (Call :Dil A 2 T0004&echo %R%[31m !LA2! %R%[0m&set Internet=&Call :Bekle 8&goto Menu)
+set Internet=
+Winget show "Google.Chrome" --accept-source-agreements > NUL 2>&1
+    if "!errorlevel!" NEQ "0" (Call :Dil A 2 T0005&echo %R%[31m !LA2! %R%[0m&Call :Bekle 8&goto Menu)
+Call :!MMValue!
+set MMValue=
+goto Menu
+
+REM -------------------------------------------------------------
+:Internet_Kontrol
+REM 0: İnternet var │ 1: İnternet yok
+set Internet=1
+FOR %%g in (
+"www.google.com"
+"archlinux.org"
+"www.bing.com"
+) do (
+    ping -n 1 %%g -w 2000 > NUL 2>&1
+        if !errorlevel! EQU 0 (set Internet=0)
+)
+goto :eof
+
+REM -------------------------------------------------------------
+:Bekle
+REM Timeout beklemeleri için
+timeout /t %~1 /nobreak > NUL
 goto :eof
